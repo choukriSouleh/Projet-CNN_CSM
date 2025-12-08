@@ -1,79 +1,170 @@
-# Projet-CNN_CSM
+# Deepfake Detection with XceptionNet
+# Table of Contents
 
-# Détection de Deepfakes avec XceptionNet
+Introduction </br> 
+What is FaceForensics++? </br>
+Our Model </br>
+Results </br>
+Key Code Sections </br>
+Installation </br>
+References </br>
 
-# Description
-Ce projet implémente un système avancé de détection de deepfakes en utilisant une version modifiée du modèle XceptionNet, pré‑entraîné sur ImageNet.
-Le modèle est ensuite fine‑tuné sur le dataset FaceForensics++ (C23), un des datasets les plus utilisés pour l'analyse de manipulations faciales.
 
-# Notre objectif est classifier une image en Originale ou Deepfake.
+# Introduction
+What is the Problem? </br>
+Deepfakes are fake videos or images created by AI. They can: </br>
 
- Donc dans ce projet on va : 
- 
-- Charger et adapter l’architecture XceptionNet pour la tâche de classification binaire
+Spread false information </br>
+Damage people's reputation </br>
+Make us lose trust in media </br>
 
-- Prétraiter et structurer correctement le dataset FaceForensics++ C23
+Our Solution </br>
+We built a system that can detect fake faces automatically. Our model can tell if an image is real or fake with 97% accuracy.
 
-- Entraîner un modèle robuste et stable
+# What is FaceForensics++?
+FaceForensics++ (Rössler et al., 2019) is a famous research paper. It created a big dataset to train AI models.
+Main Contributions
+1. Big Dataset
 
-- Atteindre une accuracy élevée (>95%)
+18 million images from 4,000 fake videos
+1,000 real videos from YouTube
+Much bigger than other datasets
 
-- Générer un rapport d’évaluation complet (precision, recall, f1‑score)
+2. Four Manipulation Methods
+Expression Change:
 
-# Articles de Référence
-Rossler et al. (2019)
-"FaceForensics++: Learning to Detect Manipulated Facial Images"
- arXiv:1901.08971
+Face2Face: Changes facial expressions in real-time
+NeuralTextures: Uses AI to change mouth movements
 
-# Technologies Utilisées
-Langage : Python 3
+Identity Change (Face Swap):
 
-Framework : PyTorch
+FaceSwap: Replaces one person's face with another
+DeepFakes: Uses deep learning to swap faces
 
-Librairies : torchvision, pandas, numpy, scikit‑learn, matplotlib & seaborn
+3. Three Quality Levels
 
-Environnement : Google Colab 
+Raw: No compression (best quality)
+HQ: Light compression (like YouTube)
+LQ: Strong compression (like Facebook)
 
- # Dataset
-Nom : FaceForensics++ C23
+Performance Results
+MethodHuman AccuracyXceptionNet AccuracyRaw videos68.69%99.26%HQ videos66.57%95.73%LQ videos58.73%81.00%
+Important: AI is much better than humans at detecting fakes!
 
-Source : https://www.kaggle.com/datasets/fatimahirshad/faceforensics-extracted-dataset-c23
+Detection Difficulty by Method
+ManipulationAccuracy (LQ)Why?DeepFakes96.36%Easy - same artifacts every timeFaceSwap90.29%Medium - changes the whole faceFace2Face86.86%Hard - only small changesNeuralTextures80.67%Hardest - different artifacts each time
 
-Images : ~500k (50% Original, 50% Deepfake)
+Main Challenges
 
-Split : 70% train, 15% validation, 15% test
+Compression destroys evidence
 
-Format : Images JPEG 299×299 pixels
+Social media compresses videos
+This removes fake traces
+Hard to detect after compression
 
-# Architecture du Modèle
-XceptionNet (Chollet, 2017) pré-entraîné sur ImageNet, modifié pour 2 classes.
 
-Caractéristiques :
+Many different fake methods
 
-Backbone Xception (convolutions séparables en profondeur)
+New AI methods appear every day
+Models trained on old fakes fail on new ones
 
-Fine-tuning complet (toutes couches entraînables)
 
-Classifieur final : 2048 → 2 neurones
+Need big datasets
 
-Fonction de perte : CrossEntropyLoss avec pondération des classes
+Small datasets = bad performance
+Need 700+ videos minimum
 
-Optimiseur : Adam (LR=1e-4)
 
-# Résultats
-Métriques sur Test Set (1500 échantillons)
-Classe	           Precision	Recall	 F1-Score	  Support
+Face detection can fail
 
-Original (0)	      95.03%	  99.33%	  97.13%	     750
+If we can't find the face, detection fails
 
-Deepfake (1)	      99.30%	  94.80%	  97.00%	     750
 
-Accuracy	          97.07%	  97.07%	  97.07%	     1500
 
-# Accuracy totale : 97.07%
-Le modèle atteint une robustesse très élevée pour distinguer deepfakes et images authentiques.
 
-# Conclusion
-Ce projet démontre la puissance du transfer learning avec XceptionNet pour la détection de deepfakes.
-Avec une accurate de 97%, le modèle offre une excellente fiabilité tout en restant optimisé pour l’inférence sur GPU.
+🔬 Current Research (2024-2025)
+Why Detection is Still Hard Today
+I studied recent research: "Deepfake Detection that Generalizes Across Benchmarks" (Yan et al., 2025)
+New Problems:
+1. Generalization Problem
 
+Models work well on training data
+Models fail on new fake methods
+Fake generators improve faster than detectors
+
+2. Adversarial Attacks
+
+Bad people can trick detectors
+They optimize fakes to avoid detection
+
+3. Shortcut Learning
+
+Models learn wrong patterns
+Example: learning image size instead of fake artifacts
+
+4. Social Impact
+
+People don't trust any media anymore
+Even real content is questioned
+
+
+New Detection Techniques
+1. HiFE Network (2024) - Frequency Analysis
+Simple Explanation:
+
+JPEG compression removes high-frequency details
+Deepfakes leave traces in high frequencies
+HiFE recovers these hidden traces
+Result: +15-20% accuracy on compressed videos
+
+2. LNCLIP-DF (2025) - Minimal Training
+Simple Explanation:
+
+Uses pre-trained CLIP model (knows many images)
+Only trains 0.03% of parameters
+Works on 13 different datasets
+Result: Best generalization across datasets
+
+3. Multi-Modal Detection
+Simple Explanation:
+
+Checks audio AND video together
+Detects lip-sync problems
+Finds voice mismatches
+
+4. FakeCatcher (Intel) - Biological Signals
+Simple Explanation:
+
+Measures blood flow under skin
+Real people have blood flow patterns
+Deepfakes don't have correct blood flow
+Result: Detection in milliseconds
+
+
+🏗️ Our Model
+Why XceptionNet?
+XceptionNet is recommended by FaceForensics++ because:
+
+Efficient Architecture
+
+Uses "separable convolutions"
+Fewer parameters = faster training
+Still very powerful
+
+
+Pre-trained on ImageNet
+
+Already knows 1.2 million images
+Learns faster on our task
+
+
+Deep Network
+
+36 convolutional layers
+Can learn complex patterns
+
+
+Residual Connections
+
+Helps training very deep networks
+Better gradient flow
