@@ -11,14 +11,14 @@ References </br>
 
 
 # Introduction
-What is the Problem? </br>
+=> What is the Problem? </br>
 Deepfakes are fake videos or images created by AI. They can: </br>
 
 Spread false information </br>
 Damage people's reputation </br>
 Make us lose trust in media </br>
 
-Our Solution </br>
+=> Our Solution </br>
 We built a system that can detect fake faces automatically. Our model can tell if an image is real or fake with 97% accuracy.
 
 # What is FaceForensics++?
@@ -82,7 +82,7 @@ If we can't find the face, detection fails
 
 
 
-🔬 Current Research (2024-2025)
+# Current Research (2024-2025)
 Why Detection is Still Hard Today
 I studied recent research: "Deepfake Detection that Generalizes Across Benchmarks" (Yan et al., 2025)
 New Problems:
@@ -141,8 +141,8 @@ Deepfakes don't have correct blood flow
 Result: Detection in milliseconds
 
 
-🏗️ Our Model
-Why XceptionNet?
+# Our Model 
+Why XceptionNet? </br>
 XceptionNet is recommended by FaceForensics++ because:
 
 Efficient Architecture
@@ -168,3 +168,57 @@ Residual Connections
 
 Helps training very deep networks
 Better gradient flow
+# Model Structure 
+Input Image (299×299 pixels)
+    ↓
+Early Layers (find basic patterns)
+    ↓
+Middle Layers (find complex patterns)
+    ↓
+Final Layers (make decision)
+    ↓
+Output: [Real or Fake]
+
+# Test set: 1,500 images
+
+750 real images
+750 fake images
+
+Data Preprocessing
+For Training:
+- Resize to 299×299 pixels
+- Random horizontal flip (50% chance)
+- Random rotation (±15 degrees)
+- Change brightness/contrast randomly
+- Normalize (ImageNet standards)
+=> Why? </br> Because this helps the model learn better and not memorize.
+# Training Settings
+
+```
+Batch Size: 32 images
+Learning Rate: 0.0001
+Optimizer: Adam
+Epochs: 15+
+Scheduler: ReduceLROnPlateau
+
+**Scheduler explanation**: If validation doesn't improve for 2 epochs, reduce learning rate by 50%.
+
+---
+
+## Results
+
+### Overall Performance
+Test Accuracy: 97.07%
+Test Loss:     0.0920
+Test F1-Score: 97.00%
+```
+
+```
+
+### Confusion Matrix
+ Predicted
+              Real   Fake
+Actual Real   745     5     ← Only 5 mistakes!
+       Fake    39   711     ← 39 fakes missed
+```
+               
